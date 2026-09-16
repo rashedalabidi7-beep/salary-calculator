@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حاسبة الراتب الاحترافية - Firebase Pro</title>
+  <title>نظام إدارة ورواتب الموظفين الشامل Pro</title>
   <style>
     :root {
       --bg-color: #000000;
-      --card-bg: rgba(28, 28, 30, 0.75);
+      --card-bg: rgba(28, 28, 30, 0.78);
       --card-border: rgba(255, 255, 255, 0.12);
       --accent-color: #0a84ff;
       --accent-gradient: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
@@ -16,6 +16,7 @@
       --input-bg: rgba(118, 118, 128, 0.24);
       --danger-color: #ff453a;
       --success-color: #30d158;
+      --warning-color: #ffd60a;
       --card-radius: 20px;
     }
 
@@ -34,22 +35,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px 16px;
+      padding: 24px 16px;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(10, 132, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(94, 92, 230, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 10% 10%, rgba(10, 132, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(94, 92, 230, 0.15) 0%, transparent 40%);
     }
 
     .container {
       width: 100%;
-      max-width: 460px;
+      max-width: 520px;
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       border: 1px solid var(--card-border);
       border-radius: var(--card-radius);
       padding: 28px 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
     }
 
     .header {
@@ -68,15 +69,25 @@
       color: var(--text-sub);
     }
 
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-color);
+      margin: 18px 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .input-group {
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .input-group label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-sub);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: 500;
     }
 
@@ -85,8 +96,8 @@
       background: var(--input-bg);
       border: 1px solid transparent;
       border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 16px;
+      padding: 10px 12px;
+      font-size: 15px;
       color: var(--text-main);
       outline: none;
       transition: all 0.2s ease;
@@ -97,10 +108,16 @@
       background: rgba(118, 118, 128, 0.35);
     }
 
-    .grid-inputs {
+    .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
     }
 
     .btn-action {
@@ -114,7 +131,7 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
-      margin-top: 8px;
+      margin-top: 16px;
       transition: transform 0.1s ease, opacity 0.2s ease;
     }
 
@@ -131,22 +148,22 @@
       margin-top: 24px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .result-card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .result-card.highlight {
-      background: rgba(10, 132, 255, 0.12);
-      border-color: rgba(10, 132, 255, 0.3);
+    .result-card.main-net {
+      background: rgba(48, 209, 88, 0.12);
+      border-color: rgba(48, 209, 88, 0.3);
     }
 
     .result-title {
@@ -154,15 +171,21 @@
       color: var(--text-sub);
     }
 
+    .main-net .result-title {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
     .result-value {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text-main);
       direction: ltr;
     }
 
-    .highlight .result-value {
+    .main-net .result-value {
       color: var(--success-color);
+      font-size: 20px;
     }
 
     .history-section {
@@ -183,11 +206,15 @@
       font-weight: 600;
     }
 
+    .search-box {
+      margin-bottom: 12px;
+    }
+
     .history-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
     }
 
@@ -199,16 +226,60 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      font-size: 12px;
     }
 
-    .delete-btn {
+    .item-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-sm {
       background: none;
       border: none;
-      color: var(--danger-color);
-      cursor: pointer;
       font-size: 12px;
-      padding: 4px 8px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+    }
+
+    .btn-pdf {
+      color: var(--accent-color);
+      background: rgba(10, 132, 255, 0.1);
+    }
+
+    .btn-delete {
+      color: var(--danger-color);
+      background: rgba(255, 69, 58, 0.1);
+    }
+
+    /* طباعة كشف الراتب (PDF Style) */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printArea, #printArea * {
+        visibility: visible;
+      }
+      #printArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        color: #000;
+        padding: 20px;
+        direction: rtl;
+      }
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      .print-table th, .print-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: right;
+      }
     }
   </style>
 </head>
@@ -216,65 +287,117 @@
 
   <div class="container">
     <div class="header">
-      <h1>حاسبة الراتب الذكية</h1>
-      <p>احتساب وتنسيق مستحقات الموظفين مع المزامنة السحابية</p>
+      <h1>نظام إعداد الرواتب الشامل</h1>
+      <p>احتساب الاستحقاقات، الاستقطاعات، وإصدار كشوفات الرواتب</p>
     </div>
 
-    <div class="input-group">
-      <label>اسم الموظف أو المسمى الوظيفي</label>
-      <div class="input-wrapper">
-        <input type="text" id="employeeName" placeholder="أدخل الاسم">
-      </div>
-    </div>
-
-    <div class="input-group">
-      <label>الراتب الشهري الأساسي</label>
-      <div class="input-wrapper">
-        <input type="number" id="monthlySalary" placeholder="أدخل المبلغ الإجمالي" inputmode="decimal">
-      </div>
-    </div>
-
-    <div class="grid-inputs">
+    <!-- 1. البيانات الأساسية -->
+    <div class="section-title">👤 البيانات الأساسية</div>
+    <div class="grid-2">
       <div class="input-group">
-        <label>أيام العمل / شهرياً</label>
-        <div class="input-wrapper">
-          <input type="number" id="workDays" value="30">
-        </div>
+        <label>اسم الموظف</label>
+        <div class="input-wrapper"><input type="text" id="employeeName" placeholder="أدخل الاسم"></div>
       </div>
       <div class="input-group">
-        <label>ساعات العمل / يومياً</label>
-        <div class="input-wrapper">
-          <input type="number" id="workHours" value="8">
-        </div>
+        <label>الراتب الأساسي</label>
+        <div class="input-wrapper"><input type="number" id="baseSalary" placeholder="0.00" inputmode="decimal"></div>
       </div>
     </div>
 
-    <button class="btn-action" id="btnSave">احتساب وحفظ السجل</button>
+    <!-- 2. أوقات العمل والأوفر تايم -->
+    <div class="section-title">⏱️ ساعات العمل والساعات الإضافية</div>
+    <div class="grid-3">
+      <div class="input-group">
+        <label>أيام العمل/شهر</label>
+        <div class="input-wrapper"><input type="number" id="workDays" value="30"></div>
+      </div>
+      <div class="input-group">
+        <label>ساعات/يوم</label>
+        <div class="input-wrapper"><input type="number" id="workHours" value="8"></div>
+      </div>
+      <div class="input-group">
+        <label>إضافي (ساعة)</label>
+        <div class="input-wrapper"><input type="number" id="overtimeHours" value="0"></div>
+      </div>
+    </div>
 
+    <!-- 3. البدلات والاضافات -->
+    <div class="section-title">➕ البدلات والحوافز</div>
+    <div class="grid-3">
+      <div class="input-group">
+        <label>بدل سكن</label>
+        <div class="input-wrapper"><input type="number" id="housingAllowance" value="0"></div>
+      </div>
+      <div class="input-group">
+        <label>بدل مواصلات</label>
+
+        <div class="input-wrapper"><input type="number" id="transAllowance" value="0"></div>
+      </div>
+      <div class="input-group">
+        <label>مكافآت أخرى</label>
+        <div class="input-wrapper"><input type="number" id="otherBonus" value="0"></div>
+      </div>
+    </div>
+
+    <!-- 4. الخصومات والاستقطاعات -->
+    <div class="section-title">➖ الاستقطاعات والخصومات</div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>نسبة التأمينات (%)</label>
+        <div class="input-wrapper"><input type="number" id="insuranceRate" value="0" placeholder="مثال: 9"></div>
+      </div>
+      <div class="input-group">
+        <label>خصومات / سُلف</label>
+        <div class="input-wrapper"><input type="number" id="deductions" value="0"></div>
+      </div>
+    </div>
+
+    <button class="btn-action" id="btnSave">احتساب وحفظ الكشف في السحاب</button>
+
+    <!-- عرض النتائج الفورية -->
     <div class="results-container">
-      <div class="result-card highlight">
-        <span class="result-title">الراتب الشهري الإجمالي</span>
-        <span class="result-value" id="resMonthly">0.00</span>
+      <div class="result-card main-net">
+        <span class="result-title">الراتب الصافي المستحق</span>
+        <span class="result-value" id="resNet">0.00</span>
       </div>
-      <div class="result-card">
-        <span class="result-title">معدل الاستحقاق اليومي</span>
-        <span class="result-value" id="resDaily">0.00</span>
+      <div class="grid-2">
+        <div class="result-card">
+          <span class="result-title">إجمالي الاستحقاقات</span>
+          <span class="result-value" id="resGross">0.00</span>
+        </div>
+        <div class="result-card">
+          <span class="result-title">إجمالي الخصومات</span>
+          <span class="result-value" id="resTotalDeductions">0.00</span>
+        </div>
       </div>
-      <div class="result-card">
-        <span class="result-title">أجر الساعة الواحدة</span>
-        <span class="result-value" id="resHourly">0.00</span>
+      <div class="grid-2">
+        <div class="result-card">
+          <span class="result-title">معدل أجر اليوم</span>
+          <span class="result-value" id="resDaily">0.00</span>
+        </div>
+        <div class="result-card">
+          <span class="result-title">قيمة الأوفر تايم</span>
+          <span class="result-value" id="resOvertimeVal">0.00</span>
+        </div>
       </div>
     </div>
 
+    <!-- السجلات السحابية -->
     <div class="history-section">
       <div class="history-header">
-        <span class="history-title">السجلات المحفوظة سحابياً</span>
+        <span class="history-title">السجلات المحفوظة في Firebase</span>
+      </div>
+      <div class="input-wrapper search-box">
+        <input type="text" id="searchInput" placeholder="🔍 بحث باسم الموظف...">
       </div>
       <div class="history-list" id="historyList">
-        <div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">جاري تحميل السجلات...</div>
+        <div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">جاري تحميل البيانات...</div>
       </div>
     </div>
   </div>
+
+  <!-- منطقة متوارية مخصصة للطباعة والتصدير PDF -->
+  <div id="printArea" style="display:none;"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -296,78 +419,135 @@
     const db = getFirestore(app);
     const salariesRef = collection(db, "salaries");
 
-    const btnSave = document.getElementById('btnSave');
+    let allRecords = [];
 
-    btnSave.addEventListener('click', async () => {
+    // زر الاحتساب والحفظ
+    document.getElementById('btnSave').addEventListener('click', async () => {
       const name = document.getElementById('employeeName').value.trim() || 'موظف غير مسمى';
-      const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+      const baseSalary = parseFloat(document.getElementById('baseSalary').value) || 0;
       const days = parseFloat(document.getElementById('workDays').value) || 30;
       const hours = parseFloat(document.getElementById('workHours').value) || 8;
+      const overtimeHours = parseFloat(document.getElementById('overtimeHours').value) || 0;
 
-      if (salary <= 0) {
-        alert("يرجى إدخال مبلغ الراتب الشهري بشكل صحيح.");
+      const housing = parseFloat(document.getElementById('housingAllowance').value) || 0;
+      const trans = parseFloat(document.getElementById('transAllowance').value) || 0;
+      const bonus = parseFloat(document.getElementById('otherBonus').value) || 0;
+
+      const insRate = parseFloat(document.getElementById('insuranceRate').value) || 0;
+      const otherDeductions = parseFloat(document.getElementById('deductions').value) || 0;
+
+      if (baseSalary <= 0) {
+        alert("يرجى إدخال الراتب الأساسي.");
         return;
       }
 
-      const daily = days > 0 ? (salary / days) : 0;
-      const hourly = (days > 0 && hours > 0) ? (daily / hours) : 0;
+      // المعادلات الحسابية
+      const dailyRate = days > 0 ? (baseSalary / days) : 0;
+      const hourlyRate = (days > 0 && hours > 0) ? (dailyRate / hours) : 0;
+      const overtimePay = overtimeHours * (hourlyRate * 1.5); // أجر الساعة الإضافية 1.5
 
-      document.getElementById('resMonthly').textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2 });
-      document.getElementById('resDaily').textContent = daily.toLocaleString('en-US', { minimumFractionDigits: 2 });
-      document.getElementById('resHourly').textContent = hourly.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      const grossSalary = baseSalary + housing + trans + bonus + overtimePay;
+      const insuranceVal = (baseSalary * insRate) / 100;
+      const totalDeductions = insuranceVal + otherDeductions;
+      const netSalary = grossSalary - totalDeductions;
 
-      btnSave.disabled = true;
-      btnSave.textContent = "جاري الحفظ...";
+      // تحديث الواجهة
+      document.getElementById('resNet').textContent = netSalary.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resGross').textContent = grossSalary.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resTotalDeductions').textContent = totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resDaily').textContent = dailyRate.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resOvertimeVal').textContent = overtimePay.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+      const btn = document.getElementById('btnSave');
+      btn.disabled = true;
+      btn.textContent = "جاري الحفظ بالسحاب...";
 
       try {
         await addDoc(salariesRef, {
-          name,
-          salary,
-          daily,
-          hourly,
+          name, baseSalary, grossSalary, totalDeductions, netSalary,
+          housing, trans, bonus, insuranceVal, otherDeductions, overtimePay,
           createdAt: serverTimestamp()
         });
-        document.getElementById('employeeName').value = '';
-        document.getElementById('monthlySalary').value = '';
       } catch (e) {
-        console.error("خطأ أثناء الحفظ:", e);
-        alert("تعذر الحفظ في قاعدة البيانات، تحقق من اتصالك بالنواحي التكميلية.");
+        console.error("خطأ بالحفظ:", e);
       } finally {
-        btnSave.disabled = false;
-        btnSave.textContent = "احتساب وحفظ السجل";
+        btn.disabled = false;
+        btn.textContent = "احتساب وحفظ الكشف في السحاب";
       }
     });
 
+    // استماع وتحديث القائمة الفورية
     const q = query(salariesRef, orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
+      allRecords = [];
+      snapshot.forEach(docItem => {
+        allRecords.push({ id: docItem.id, ...docItem.data() });
+      });
+      renderList(allRecords);
+    });
+
+    // رسم القائمة مع دعم الفلترة والبحث
+    function renderList(records) {
       const container = document.getElementById('historyList');
-      if (snapshot.empty) {
-        container.innerHTML = '<div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">لا توجد سجلات محفوظة حالياً</div>';
+      if (records.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">لا توجد سجلات مطابقة</div>';
         return;
       }
 
-      container.innerHTML = '';
-      snapshot.forEach((docItem) => {
-        const item = docItem.data();
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        div.innerHTML = `
+      container.innerHTML = records.map(item => `
+        <div class="history-item">
           <div>
             <strong>${item.name}</strong><br>
-            <small style="color:var(--text-sub)">الشهري: ${item.salary?.toLocaleString()} | اليومي: ${item.daily?.toFixed(2)}</small>
+            <small style="color:var(--text-sub)">الصافي: <span style="color:var(--success-color); font-weight:bold;">${item.netSalary?.toLocaleString()}</span></small>
           </div>
-          <button class="delete-btn" onclick="deleteRecord('${docItem.id}')">حذف</button>
-        `;
-        container.appendChild(div);
-      });
+          <div class="item-actions">
+            <button class="btn-sm btn-pdf" onclick="generatePDF('${item.id}')">طباعة PDF</button>
+            <button class="btn-sm btn-delete" onclick="deleteRecord('${item.id}')">حذف</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // تصفية البحث
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const val = e.target.value.toLowerCase();
+      const filtered = allRecords.filter(r => r.name.toLowerCase().includes(val));
+      renderList(filtered);
     });
 
+    // طباعة وتوليد كشف الراتب (Payslip)
+    window.generatePDF = (id) => {
+      const item = allRecords.find(r => r.id === id);
+      if (!item) return;
+
+      const printArea = document.getElementById('printArea');
+      printArea.style.display = 'block';
+      printArea.innerHTML = `
+        <h2 style="text-align:center; margin-bottom:10px;">كشف استحقاق راتب شهري (Payslip)</h2>
+        <p><strong>اسم الموظف:</strong> ${item.name}</p>
+        <hr style="margin:10px 0;">
+        <table class="print-table">
+          <tr><th>البيان</th><th>المبلغ</th></tr>
+          <tr><td>الراتب الأساسي</td><td>${item.baseSalary?.toLocaleString()}</td></tr>
+          <tr><td>بدل السكن والمواصلات والبدلات</td><td>${((item.housing||0) + (item.trans||0) + (item.bonus||0))?.toLocaleString()}</td></tr>
+          <tr><td>أجر الساعات الإضافية (Overtime)</td><td>${item.overtimePay?.toLocaleString()}</td></tr>
+          <tr style="background:#f9f9f9;"><td><strong>إجمالي الاستحقاقات (Gross)</strong></td><td><strong>${item.grossSalary?.toLocaleString()}</strong></td></tr>
+          <tr><td>استقطاع التأمينات والخصومات</td><td>${item.totalDeductions?.toLocaleString()}</td></tr>
+          <tr style="background:#e8f5e9;"><td><strong>صافي الراتب المستحق للصرف</strong></td><td><strong style="color:green;">${item.netSalary?.toLocaleString()}</strong></td></tr>
+        </table>
+      `;
+
+      window.print();
+      printArea.style.display = 'none';
+    };
+
+    // حذف سجل
     window.deleteRecord = async (id) => {
       if (confirm("هل أنت تأكد من رغبتك في حذف هذا السجل؟")) {
         try {
           await deleteDoc(doc(db, "salaries", id));
         } catch (e) {
-          console.error("خطأ أثناء الحذف:", e);
+          console.error("خطأ:", e);
         }
       }
     };
