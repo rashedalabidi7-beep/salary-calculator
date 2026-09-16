@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حاسبة الراتب الشاملة Pro</title>
+  <title>حاسبة الراتب الاحترافية - Firebase Pro</title>
   <style>
     :root {
       --bg-color: #000000;
@@ -15,6 +15,7 @@
       --text-sub: #8e8e93;
       --input-bg: rgba(118, 118, 128, 0.24);
       --danger-color: #ff453a;
+      --success-color: #30d158;
       --card-radius: 20px;
     }
 
@@ -114,11 +115,16 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
       margin-top: 8px;
-      transition: transform 0.1s ease;
+      transition: transform 0.1s ease, opacity 0.2s ease;
     }
 
     .btn-action:active {
       transform: scale(0.98);
+    }
+
+    .btn-action:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     .results-container {
@@ -156,7 +162,7 @@
     }
 
     .highlight .result-value {
-      color: #30d158;
+      color: var(--success-color);
     }
 
     .history-section {
@@ -210,73 +216,71 @@
 
   <div class="container">
     <div class="header">
-      <h1>حاسبة الراتب الشاملة</h1>
-      <p>حساب وتخزين السجلات في Firebase</p>
+      <h1>حاسبة الراتب الذكية</h1>
+      <p>احتساب وتنسيق مستحقات الموظفين مع المزامنة السحابية</p>
     </div>
 
     <div class="input-group">
-      <label>اسم الموظف / المسمى</label>
+      <label>اسم الموظف أو المسمى الوظيفي</label>
       <div class="input-wrapper">
-        <input type="text" id="employeeName" placeholder="مثال: رشيد العبيدي">
+        <input type="text" id="employeeName" placeholder="أدخل الاسم">
       </div>
     </div>
 
     <div class="input-group">
       <label>الراتب الشهري الأساسي</label>
       <div class="input-wrapper">
-        <input type="number" id="monthlySalary" placeholder="أدخل المبلغ" inputmode="decimal">
+        <input type="number" id="monthlySalary" placeholder="أدخل المبلغ الإجمالي" inputmode="decimal">
       </div>
     </div>
 
     <div class="grid-inputs">
       <div class="input-group">
-        <label>أيام العمل/شهر</label>
+        <label>أيام العمل / شهرياً</label>
         <div class="input-wrapper">
           <input type="number" id="workDays" value="30">
         </div>
       </div>
       <div class="input-group">
-        <label>ساعات العمل/يوم</label>
+        <label>ساعات العمل / يومياً</label>
         <div class="input-wrapper">
           <input type="number" id="workHours" value="8">
         </div>
       </div>
     </div>
 
-    <button class="btn-action" id="btnSave">حساب وحفظ السجل</button>
+    <button class="btn-action" id="btnSave">احتساب وحفظ السجل</button>
 
     <div class="results-container">
       <div class="result-card highlight">
-        <span class="result-title">الراتب الشهري</span>
+        <span class="result-title">الراتب الشهري الإجمالي</span>
         <span class="result-value" id="resMonthly">0.00</span>
       </div>
       <div class="result-card">
-        <span class="result-title">معدل اليوم</span>
+        <span class="result-title">معدل الاستحقاق اليومي</span>
         <span class="result-value" id="resDaily">0.00</span>
       </div>
       <div class="result-card">
-        <span class="result-title">أجر الساعة</span>
+        <span class="result-title">أجر الساعة الواحدة</span>
         <span class="result-value" id="resHourly">0.00</span>
       </div>
     </div>
 
     <div class="history-section">
       <div class="history-header">
-        <span class="history-title">السجلات المزامنة من السحاب</span>
+        <span class="history-title">السجلات المحفوظة سحابياً</span>
       </div>
       <div class="history-list" id="historyList">
-        <div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">جاري تحميل البيانات...</div>
+        <div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">جاري تحميل السجلات...</div>
       </div>
     </div>
   </div>
 
-  <!-- Firebase Web SDK Modules -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
     import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // إعدادات مشروع Firebase الخاص بك
     const firebaseConfig = {
       apiKey: "AIzaSyBpK3xg0mWICrIpFqT-YOSuNySgd92y6lU",
       authDomain: "calculator-5d1e9.firebaseapp.com",
@@ -287,30 +291,34 @@
       measurementId: "G-NZ8MYQCT6V"
     };
 
-    // تهيئة الخدمات
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
     const salariesRef = collection(db, "salaries");
 
-    // وظيفة الحساب والحفظ في السحاب
-    document.getElementById('btnSave').addEventListener('click', async () => {
-      const name = document.getElementById('employeeName').value || 'غير مسمى';
+    const btnSave = document.getElementById('btnSave');
+
+    btnSave.addEventListener('click', async () => {
+      const name = document.getElementById('employeeName').value.trim() || 'موظف غير مسمى';
       const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
       const days = parseFloat(document.getElementById('workDays').value) || 30;
       const hours = parseFloat(document.getElementById('workHours').value) || 8;
 
-      if (salary <= 0) return;
+      if (salary <= 0) {
+        alert("يرجى إدخال مبلغ الراتب الشهري بشكل صحيح.");
+        return;
+      }
 
       const daily = days > 0 ? (salary / days) : 0;
       const hourly = (days > 0 && hours > 0) ? (daily / hours) : 0;
 
-      // تحديث النتائج على الشاشة
       document.getElementById('resMonthly').textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2 });
       document.getElementById('resDaily').textContent = daily.toLocaleString('en-US', { minimumFractionDigits: 2 });
       document.getElementById('resHourly').textContent = hourly.toLocaleString('en-US', { minimumFractionDigits: 2 });
 
-      // إضافة المستند إلى Firestore
+      btnSave.disabled = true;
+      btnSave.textContent = "جاري الحفظ...";
+
       try {
         await addDoc(salariesRef, {
           name,
@@ -319,17 +327,22 @@
           hourly,
           createdAt: serverTimestamp()
         });
+        document.getElementById('employeeName').value = '';
+        document.getElementById('monthlySalary').value = '';
       } catch (e) {
-        console.error("خطأ أثناء الحفظ في Firebase:", e);
+        console.error("خطأ أثناء الحفظ:", e);
+        alert("تعذر الحفظ في قاعدة البيانات، تحقق من اتصالك بالنواحي التكميلية.");
+      } finally {
+        btnSave.disabled = false;
+        btnSave.textContent = "احتساب وحفظ السجل";
       }
     });
 
-    // استماع لحظي واسترجاع السجلات تلقائياً
     const q = query(salariesRef, orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       const container = document.getElementById('historyList');
       if (snapshot.empty) {
-        container.innerHTML = '<div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">لا يوجد سجلات مخزنة</div>';
+        container.innerHTML = '<div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">لا توجد سجلات محفوظة حالياً</div>';
         return;
       }
 
@@ -341,7 +354,7 @@
         div.innerHTML = `
           <div>
             <strong>${item.name}</strong><br>
-            <small style="color:var(--text-sub)">${item.salary?.toLocaleString()} | يومي: ${item.daily?.toFixed(1)}</small>
+            <small style="color:var(--text-sub)">الشهري: ${item.salary?.toLocaleString()} | اليومي: ${item.daily?.toFixed(2)}</small>
           </div>
           <button class="delete-btn" onclick="deleteRecord('${docItem.id}')">حذف</button>
         `;
@@ -349,12 +362,13 @@
       });
     });
 
-    // وظيفة حذف سجل محدد
     window.deleteRecord = async (id) => {
-      try {
-        await deleteDoc(doc(db, "salaries", id));
-      } catch (e) {
-        console.error("خطأ أثناء الحذف:", e);
+      if (confirm("هل أنت تأكد من رغبتك في حذف هذا السجل؟")) {
+        try {
+          await deleteDoc(doc(db, "salaries", id));
+        } catch (e) {
+          console.error("خطأ أثناء الحذف:", e);
+        }
       }
     };
   </script>
