@@ -1,399 +1,255 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e293b">
-    <title>نظام إدارة وبرمجيات المرتبات المتقدم</title>
-    
-    <!-- PWA Web App Manifest -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuitptmO2KfYqCDYp9mE2LHYp9iq2KgiLAogICJzaG9ydF9uYW1lIjogIuitptmO2KfYqIIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMGYxNzJhIiwKICAidGhlbWVfY29sb3IiOiAiIzFlMjkzYiIKfQ==">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة الراتب الذكية</title>
+  <style>
+    :root {
+      --bg-color: #000000;
+      --card-bg: rgba(28, 28, 30, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent-color: #0a84ff;
+      --accent-gradient: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
+      --text-main: #ffffff;
+      --text-sub: #8e8e93;
+      --input-bg: rgba(118, 118, 128, 0.24);
+      --card-radius: 20px;
+    }
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    <style>
-        :root {
-            --bg-color: #f1f5f9;
-            --card-bg: #ffffff;
-            --text-color: #0f172a;
-            --border-color: #e2e8f0;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #10b981;
-            --danger: #ef4444;
-            --secondary: #64748b;
-            --shadow: rgba(0, 0, 0, 0.05);
-        }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 16px;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(10, 132, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(94, 92, 230, 0.15) 0%, transparent 40%);
+    }
 
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --border-color: #334155;
-            --primary: #3b82f6;
-            --primary-hover: #60a5fa;
-            --success: #10b981;
-            --danger: #f87171;
-            --secondary: #94a3b8;
-            --shadow: rgba(0, 0, 0, 0.3);
-        }
+    .container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 28px 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background 0.3s, color 0.3s; }
-        body { background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
-        
-        .header-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .theme-toggle { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 20px; cursor: pointer; color: var(--text-color); font-weight: bold; }
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
 
-        .card { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow); }
-        h2, h3 { margin-top: 0; color: var(--primary); text-align: center; }
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .full-width { grid-column: 1 / -1; }
+    .header p {
+      font-size: 14px;
+      color: var(--text-sub);
+    }
 
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        .input-group label { font-size: 13px; font-weight: 600; color: var(--secondary); }
-        .input-group input, .input-group select { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 14px; outline: none; }
-        .input-group input:focus, .input-group select:focus { border-color: var(--primary); }
+    .input-group {
+      margin-bottom: 20px;
+    }
 
-        .section-title { font-size: 15px; font-weight: bold; margin: 15px 0 5px 0; border-bottom: 2px solid var(--border-color); padding-bottom: 5px; color: var(--primary); }
+    .input-group label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
 
-        .btn { padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-primary { background-color: var(--primary); color: white; width: 100%; margin-top: 15px; font-size: 16px; padding: 12px; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-        .btn-success { background-color: var(--success); color: white; }
-        .btn-secondary { background-color: var(--secondary); color: white; }
-        .btn-danger { background-color: var(--danger); color: white; padding: 5px 10px; font-size: 12px; }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-        .actions-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; }
-        .search-box { flex: 1; min-width: 200px; }
+    .input-wrapper input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 17px;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.2s ease;
+    }
 
-        .result-box { margin-top: 20px; padding: 15px; background-color: var(--bg-color); border: 1px dashed var(--border-color); border-radius: 12px; }
-        .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 14px; }
-        .result-item.highlight { grid-column: span 2; background: var(--card-bg); padding: 10px; border-radius: 8px; border: 1px solid var(--primary); font-weight: bold; text-align: center; font-size: 16px; color: var(--primary); }
+    .input-wrapper input:focus {
+      border-color: var(--accent-color);
+      background: rgba(118, 118, 128, 0.35);
+    }
 
-        .table-container { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: right; }
-        th, td { padding: 12px; border-bottom: 1px solid var(--border-color); }
-        th { background-color: var(--bg-color); color: var(--secondary); }
+    .grid-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
-        .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 20px; border-radius: 8px; background: var(--success); color: white; font-weight: bold; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
+    .btn-calc {
+      width: 100%;
+      background: var(--accent-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.2s ease;
+      box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
+      margin-top: 8px;
+    }
 
-        @media print {
-            body { background: white; color: black; padding: 0; }
-            .header-bar, .actions-bar, .btn-primary, .theme-toggle, .no-print { display: none !important; }
-            .card { box-shadow: none; border: 1px solid #ccc; width: 100%; }
-        }
-    </style>
+    .btn-calc:active {
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    .results-container {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .result-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-card.highlight {
+      background: rgba(10, 132, 255, 0.12);
+      border-color: rgba(10, 132, 255, 0.3);
+    }
+
+    .result-info span {
+      display: block;
+    }
+
+    .result-title {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 2px;
+    }
+
+    .result-subtitle {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .result-value {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--text-main);
+      direction: ltr;
+    }
+
+    .highlight .result-value {
+      color: #30d158;
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-bar">
-        <h2>نظام إدارة الرواتب والبدلات</h2>
-        <button class="theme-toggle" onclick="toggleTheme()">🌙 الوضع الداكن</button>
+  <div class="container">
+    <div class="header">
+      <h1>حاسبة الراتب</h1>
+      <p>احسب تفاصيل راتبك اليومي والشهر بسلاسة</p>
     </div>
 
-    <!-- نموذج الإدخال -->
-    <div class="card no-print">
-        <div class="form-grid">
-            <div class="input-group full-width">
-                <label for="empName">اسم الموظف</label>
-                <input type="text" id="empName" placeholder="أدخل اسم الموظف الثلاثي">
-            </div>
-
-            <div class="input-group">
-                <label for="currency">العملة المستخدمة</label>
-                <select id="currency">
-                    <option value="YER">ريال يمني (YER)</option>
-                    <option value="SAR">ريال سعودي (SAR)</option>
-                    <option value="USD">دولار أمريكي (USD)</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="payRate">أجر الساعة الأساسي</label>
-                <input type="number" id="payRate" placeholder="0" min="0" step="0.5">
-            </div>
-
-            <div class="input-group">
-                <label for="hours">ساعات العمل الأساسية</label>
-                <input type="number" id="hours" placeholder="مثال: 40" min="0">
-            </div>
-
-            <div class="input-group">
-                <label for="overtimeHours">ساعات العمل الإضافي</label>
-                <input type="number" id="overtimeHours" placeholder="مثال: 5" min="0">
-            </div>
-
-            <!-- البدلات والمكافآت -->
-            <div class="full-width section-title">البدلات والمكافآت (+)</div>
-
-            <div class="input-group">
-                <label for="housingAllowance">بدل سكن</label>
-                <input type="number" id="housingAllowance" value="0" min="0">
-            </div>
-
-            <div class="input-group">
-                <label for="transportAllowance">بدل مواصلات</label>
-                <input type="number" id="transportAllowance" value="0" min="0">
-            </div>
-
-            <div class="input-group">
-                <label for="bonus">مكافآت أداء</label>
-                <input type="number" id="bonus" value="0" min="0">
-            </div>
-
-            <!-- الاستقطاعات والخصومات -->
-            <div class="full-width section-title">الخصومات والاستقطاعات (-)</div>
-
-            <div class="input-group">
-                <label for="taxRate">ضريبة الدخل (%)</label>
-                <input type="number" id="taxRate" value="0" min="0" max="100">
-            </div>
-
-            <div class="input-group">
-                <label for="socialSecurity">تأمين اجتماعي / تقاعد</label>
-                <input type="number" id="socialSecurity" value="0" min="0">
-            </div>
-
-            <div class="input-group">
-                <label for="deductions">خصومات غياب أو سلف</label>
-                <input type="number" id="deductions" value="0" min="0">
-            </div>
-        </div>
-
-        <button class="btn btn-primary" id="calcBtn" onclick="calculateSalary()">حساب وحفظ سجل الراتب</button>
-
-        <!-- صندوق النتيجة السريعة -->
-        <div class="result-box" id="resultBox" style="display:none;">
-            <div class="result-grid">
-                <div>الراتب الأساسي: <span id="resBase">0</span></div>
-                <div>أجر الإضافي ($1.5\times$): <span id="resOvertime">0</span></div>
-                <div>إجمالي البدلات: <span id="resAllowances">0</span></div>
-                <div>إجمالي الخصومات والضرائب: <span id="resDeductions">0</span></div>
-                <div class="result-item highlight">صافي الراتب المستحق: <span id="resNet">0</span></div>
-            </div>
-        </div>
+    <div class="input-group">
+      <label>الراتب الشهري الأولي</label>
+      <div class="input-wrapper">
+        <input type="number" id="monthlySalary" placeholder="أدخل الراتب الشامل" inputmode="decimal">
+      </div>
     </div>
 
-    <!-- جدول السجلات السحابية -->
-    <div class="card">
-        <h3>سجلات المرتبات السحابية</h3>
-        
-        <div class="actions-bar no-print">
-            <input type="text" id="searchBox" class="search-box input-group" placeholder="🔍 بحث باسم الموظف..." oninput="filterRecords()">
-            <button class="btn btn-success" onclick="exportToCSV()">📊 تصدير Excel (CSV)</button>
-            <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة التقارير (PDF)</button>
+    <div class="grid-inputs">
+      <div class="input-group">
+        <label>أيام العمل/شهر</label>
+        <div class="input-wrapper">
+          <input type="number" id="workDays" value="30" inputmode="numeric">
         </div>
-
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>الموظف</th>
-                        <th>الأساسي</th>
-                        <th>الإضافي</th>
-                        <th>البدلات</th>
-                        <th>الخصومات</th>
-                        <th>الصافي</th>
-                        <th>العملة</th>
-                        <th class="no-print">إجراءات</th>
-                    </tr>
-                </thead>
-                <tbody id="recordsTable">
-                    <tr><td colspan="8" style="text-align:center;">جاري تحميل البيانات السحابية...</td></tr>
-                </tbody>
-            </table>
+      </div>
+      <div class="input-group">
+        <label>ساعات العمل/يوم</label>
+        <div class="input-wrapper">
+          <input type="number" id="workHours" value="8" inputmode="numeric">
         </div>
+      </div>
     </div>
-</div>
 
-<div id="toast" class="toast">تمت العملية بنجاح!</div>
+    <button class="btn-calc" onclick="calculateSalary()">حساب التفاصيل</button>
 
-<script>
-    // 1. تهيئة Firebase Firestore
-    const firebaseConfig = {
-        apiKey: "AIzaSyC...", 
-        authDomain: "calculator-5d1e9.firebaseapp.com",
-        projectId: "calculator-5d1e9",
-        storageBucket: "calculator-5d1e9.appspot.com",
-        messagingSenderId: "108...",
-        appId: "1:108..."
-    };
-    
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+    <div class="results-container">
+      <div class="result-card highlight">
+        <div class="result-info">
+          <span class="result-title">الراتب الشهري الصافي</span>
+          <span class="result-subtitle">إجمالي المستحق</span>
+        </div>
+        <span class="result-value" id="resMonthly">0.00</span>
+      </div>
+
+      <div class="result-card">
+        <div class="result-info">
+          <span class="result-title">معدل الراتب اليومي</span>
+          <span class="result-subtitle">لكل يوم عمل</span>
+        </div>
+        <span class="result-value" id="resDaily">0.00</span>
+      </div>
+
+      <div class="result-card">
+        <div class="result-info">
+          <span class="result-title">أجر ساعة العمل</span>
+          <span class="result-subtitle">لكل ساعة</span>
+        </div>
+        <span class="result-value" id="resHourly">0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateSalary() {
+      const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
+      const days = parseFloat(document.getElementById('workDays').value) || 30;
+      const hours = parseFloat(document.getElementById('workHours').value) || 8;
+
+      const daily = days > 0 ? (salary / days) : 0;
+      const hourly = (days > 0 && hours > 0) ? (daily / hours) : 0;
+
+      document.getElementById('resMonthly').textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('resDaily').textContent = daily.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('resHourly').textContent = hourly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
-    const db = firebase.firestore();
+  </script>
 
-    let allRecords = [];
-
-    // 2. تفعيل Dark Mode
-    function toggleTheme() {
-        const currentTheme = document.body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.body.setAttribute('data-theme', newTheme);
-        document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? '☀️ الوضع النهارى' : '🌙 الوضع الداكن';
-        localStorage.setItem('theme', newTheme);
-    }
-
-    if (localStorage.getItem('theme') === 'dark') {
-        toggleTheme();
-    }
-
-    // 3. حساب الراتب والحفظ في Firestore
-    async function calculateSalary() {
-        const name = document.getElementById('empName').value.trim();
-        const payRate = parseFloat(document.getElementById('payRate').value) || 0;
-        const hours = parseFloat(document.getElementById('hours').value) || 0;
-        const overtimeHours = parseFloat(document.getElementById('overtimeHours').value) || 0;
-        const housing = parseFloat(document.getElementById('housingAllowance').value) || 0;
-        const transport = parseFloat(document.getElementById('transportAllowance').value) || 0;
-        const bonus = parseFloat(document.getElementById('bonus').value) || 0;
-        const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
-        const socialSecurity = parseFloat(document.getElementById('socialSecurity').value) || 0;
-        const deductions = parseFloat(document.getElementById('deductions').value) || 0;
-        const currency = document.getElementById('currency').value;
-
-        if (!name || payRate <= 0) {
-            showToast("يرجى إدخال اسم الموظف وأجر الساعة بشكل صحيح!", true);
-            return;
-        }
-
-        // العمليات الحسابية
-        const basePay = hours * payRate;
-        const overtimePay = overtimeHours * (payRate * 1.5);
-        const totalAllowances = housing + transport + bonus;
-        const grossPay = basePay + overtimePay + totalAllowances;
-        
-        const taxAmount = (grossPay * taxRate) / 100;
-        const totalDeductions = taxAmount + socialSecurity + deductions;
-        const netPay = grossPay - totalDeductions;
-
-        // عرض النتائج في الصفحة
-        document.getElementById('resBase').textContent = `${basePay.toFixed(2)} ${currency}`;
-        document.getElementById('resOvertime').textContent = `${overtimePay.toFixed(2)} ${currency}`;
-        document.getElementById('resAllowances').textContent = `${totalAllowances.toFixed(2)} ${currency}`;
-        document.getElementById('resDeductions').textContent = `${totalDeductions.toFixed(2)} ${currency}`;
-        document.getElementById('resNet').textContent = `${netPay.toFixed(2)} ${currency}`;
-        document.getElementById('resultBox').style.display = 'block';
-
-        // حفظ في Firebase
-        try {
-            await db.collection("salary_records").add({
-                name, basePay, overtimePay, totalAllowances, totalDeductions, netPay, currency,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            showToast("تم حفظ سجل الموظف بنجاح!");
-            clearForm();
-        } catch (error) {
-            showToast("حدث خطأ أثناء الحفظ في السحابة", true);
-        }
-    }
-
-    // 4. المزامنة الفورية وقراءة البيانات (onSnapshot)
-    db.collection("salary_records").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
-        allRecords = [];
-        snapshot.forEach(doc => {
-            allRecords.push({ id: doc.id, ...doc.data() });
-        });
-        renderTable(allRecords);
-    });
-
-    // 5. عرض البيانات في الجدول
-    function renderTable(records) {
-        const tbody = document.getElementById('recordsTable');
-        if (records.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">لا توجد سجلات حالياً</td></tr>';
-            return;
-        }
-
-        tbody.innerHTML = records.map(r => `
-            <tr>
-                <td><strong>${r.name}</strong></td>
-                <td>${(r.basePay || 0).toFixed(2)}</td>
-                <td>${(r.overtimePay || 0).toFixed(2)}</td>
-                <td>${(r.totalAllowances || 0).toFixed(2)}</td>
-                <td>${(r.totalDeductions || 0).toFixed(2)}</td>
-                <td><strong style="color:var(--success);">${(r.netPay || 0).toFixed(2)}</strong></td>
-                <td>${r.currency || 'YER'}</td>
-                <td class="no-print">
-                    <button class="btn btn-danger" onclick="deleteRecord('${r.id}')">حذف</button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    // 6. البحث والتصفية المباشرة
-    function filterRecords() {
-        const query = document.getElementById('searchBox').value.toLowerCase();
-        const filtered = allRecords.filter(r => r.name.toLowerCase().includes(query));
-        renderTable(filtered);
-    }
-
-    // 7. حذف سجل
-    async function deleteRecord(id) {
-        if (confirm("هل أنت تأكد من رغبتك في حذف هذا السجل؟")) {
-            await db.collection("salary_records").doc(id).delete();
-            showToast("تم حذف السجل بنجاح!");
-        }
-    }
-
-    // 8. تصدير البيانات إلى Excel (CSV)
-    function exportToCSV() {
-        if (allRecords.length === 0) return alert("لا توجد بيانات للتصدير!");
-        
-        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-        csvContent += "الموظف,الراتب الأساسي,الإضافي,البدلات,الخصومات,صافي الراتب,العملة\n";
-
-        allRecords.forEach(r => {
-            csvContent += `"${r.name}",${r.basePay},${r.overtimePay},${r.totalAllowances},${r.totalDeductions},${r.netPay},${r.currency}\n`;
-        });
-
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `تقرير_المرتبات_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    // 9. تنظيف الحقول والرسائل
-    function clearForm() {
-        document.getElementById('empName').value = '';
-        document.getElementById('payRate').value = '';
-        document.getElementById('hours').value = '';
-        document.getElementById('overtimeHours').value = '';
-        document.getElementById('housingAllowance').value = '0';
-        document.getElementById('transportAllowance').value = '0';
-        document.getElementById('bonus').value = '0';
-        document.getElementById('taxRate').value = '0';
-        document.getElementById('socialSecurity').value = '0';
-        document.getElementById('deductions').value = '0';
-    }
-
-    function showToast(msg, isError = false) {
-        const toast = document.getElementById('toast');
-        toast.textContent = msg;
-        toast.style.background = isError ? 'var(--danger)' : 'var(--success)';
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 3000);
-    }
-
-    // 10. تسجيل Service Worker لدعم العمل بدون إنترنت (PWA Offline)
-    if ('serviceWorker' in navigator) {
-        const swCode = `
-            self.addEventListener('install', e => e.waitUntil(caches.open('pwa-v1').then(c => c.addAll(['./']))));
-            self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))));
-        `;
-        const blob = new Blob([swCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-    }
-</script>
 </body>
-    </html>
-    
+</html>
