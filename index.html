@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام إدارة ورواتب الموظفين الشامل Pro</title>
+  <title>نظام إعداد الرواتب الشامل Pro</title>
   <style>
     :root {
       --bg-color: #000000;
-      --card-bg: rgba(28, 28, 30, 0.78);
+      --card-bg: rgba(28, 28, 30, 0.85);
       --card-border: rgba(255, 255, 255, 0.12);
       --accent-color: #0a84ff;
       --accent-gradient: linear-gradient(135deg, #0a84ff 0%, #5e5ce6 100%);
@@ -16,8 +16,7 @@
       --input-bg: rgba(118, 118, 128, 0.24);
       --danger-color: #ff453a;
       --success-color: #30d158;
-      --warning-color: #ffd60a;
-      --card-radius: 20px;
+      --card-radius: 16px;
     }
 
     * {
@@ -35,117 +34,100 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px 16px;
+      padding: 16px 12px;
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(10, 132, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(94, 92, 230, 0.15) 0%, transparent 40%);
+        radial-gradient(circle at 10% 10%, rgba(10, 132, 255, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(94, 92, 230, 0.12) 0%, transparent 40%);
     }
 
     .container {
       width: 100%;
-      max-width: 520px;
+      max-width: 480px;
       background: var(--card-bg);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1px solid var(--card-border);
       border-radius: var(--card-radius);
-      padding: 28px 20px;
+      padding: 20px 16px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.7);
     }
 
     .header {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .header h1 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .header p {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-sub);
     }
 
     .section-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--accent-color);
-      margin: 18px 0 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin: 16px 0 8px 0;
     }
 
     .input-group {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .input-group label {
       display: block;
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-sub);
       margin-bottom: 4px;
-      font-weight: 500;
     }
 
     .input-wrapper input {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid transparent;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 15px;
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 14px;
       color: var(--text-main);
       outline: none;
-      transition: all 0.2s ease;
     }
 
     .input-wrapper input:focus {
       border-color: var(--accent-color);
-      background: rgba(118, 118, 128, 0.35);
     }
 
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
     .grid-3 {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
+      gap: 6px;
     }
 
     .btn-action {
       width: 100%;
       background: var(--accent-gradient);
       border: none;
-      border-radius: 14px;
-      padding: 14px;
+      border-radius: 12px;
+      padding: 12px;
       color: #ffffff;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
-      margin-top: 16px;
-      transition: transform 0.1s ease, opacity 0.2s ease;
-    }
-
-    .btn-action:active {
-      transform: scale(0.98);
-    }
-
-    .btn-action:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+      margin-top: 14px;
     }
 
     .results-container {
-      margin-top: 24px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -154,75 +136,70 @@
     .result-card {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px 14px;
+      border-radius: 10px;
+      padding: 10px 12px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 58px;
     }
 
     .result-card.main-net {
       background: rgba(48, 209, 88, 0.12);
       border-color: rgba(48, 209, 88, 0.3);
+      align-items: center;
+      text-align: center;
     }
 
     .result-title {
-      font-size: 13px;
+      font-size: 11px;
       color: var(--text-sub);
-    }
-
-    .main-net .result-title {
-      color: #ffffff;
-      font-weight: 600;
+      margin-bottom: 2px;
+      white-space: nowrap;
     }
 
     .result-value {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--text-main);
       direction: ltr;
+      word-break: break-all;
     }
 
     .main-net .result-value {
       color: var(--success-color);
-      font-size: 20px;
+      font-size: 22px;
     }
 
     .history-section {
-      margin-top: 28px;
+      margin-top: 24px;
       border-top: 1px solid var(--card-border);
-      padding-top: 18px;
-    }
-
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+      padding-top: 16px;
     }
 
     .history-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
+      margin-bottom: 10px;
     }
 
     .search-box {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .history-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 220px;
+      max-height: 200px;
       overflow-y: auto;
     }
 
     .history-item {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 10px 12px;
+      border-radius: 8px;
+      padding: 8px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -231,55 +208,26 @@
 
     .item-actions {
       display: flex;
-      gap: 6px;
+      gap: 4px;
     }
 
     .btn-sm {
-      background: none;
       border: none;
-      font-size: 12px;
+      font-size: 11px;
       cursor: pointer;
-      padding: 4px 6px;
+      padding: 4px 8px;
       border-radius: 6px;
     }
 
-    .btn-pdf {
-      color: var(--accent-color);
-      background: rgba(10, 132, 255, 0.1);
-    }
+    .btn-pdf { color: var(--accent-color); background: rgba(10, 132, 255, 0.12); }
+    .btn-delete { color: var(--danger-color); background: rgba(255, 69, 58, 0.12); }
 
-    .btn-delete {
-      color: var(--danger-color);
-      background: rgba(255, 69, 58, 0.1);
-    }
-
-    /* طباعة كشف الراتب (PDF Style) */
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #printArea, #printArea * {
-        visibility: visible;
-      }
-      #printArea {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        color: #000;
-        padding: 20px;
-        direction: rtl;
-      }
-      .print-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 15px;
-      }
-      .print-table th, .print-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: right;
-      }
+      body * { visibility: hidden; }
+      #printArea, #printArea * { visibility: visible; }
+      #printArea { position: absolute; left: 0; top: 0; width: 100%; color: #000; padding: 20px; direction: rtl; }
+      .print-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+      .print-table th, .print-table td { border: 1px solid #ddd; padding: 8px; text-align: right; }
     }
   </style>
 </head>
@@ -291,7 +239,6 @@
       <p>احتساب الاستحقاقات، الاستقطاعات، وإصدار كشوفات الرواتب</p>
     </div>
 
-    <!-- 1. البيانات الأساسية -->
     <div class="section-title">👤 البيانات الأساسية</div>
     <div class="grid-2">
       <div class="input-group">
@@ -304,11 +251,10 @@
       </div>
     </div>
 
-    <!-- 2. أوقات العمل والأوفر تايم -->
     <div class="section-title">⏱️ ساعات العمل والساعات الإضافية</div>
     <div class="grid-3">
       <div class="input-group">
-        <label>أيام العمل/شهر</label>
+        <label>أيام العمل</label>
         <div class="input-wrapper"><input type="number" id="workDays" value="30"></div>
       </div>
       <div class="input-group">
@@ -321,7 +267,6 @@
       </div>
     </div>
 
-    <!-- 3. البدلات والاضافات -->
     <div class="section-title">➕ البدلات والحوافز</div>
     <div class="grid-3">
       <div class="input-group">
@@ -330,7 +275,6 @@
       </div>
       <div class="input-group">
         <label>بدل مواصلات</label>
-
         <div class="input-wrapper"><input type="number" id="transAllowance" value="0"></div>
       </div>
       <div class="input-group">
@@ -339,12 +283,11 @@
       </div>
     </div>
 
-    <!-- 4. الخصومات والاستقطاعات -->
     <div class="section-title">➖ الاستقطاعات والخصومات</div>
     <div class="grid-2">
       <div class="input-group">
         <label>نسبة التأمينات (%)</label>
-        <div class="input-wrapper"><input type="number" id="insuranceRate" value="0" placeholder="مثال: 9"></div>
+        <div class="input-wrapper"><input type="number" id="insuranceRate" value="0"></div>
       </div>
       <div class="input-group">
         <label>خصومات / سُلف</label>
@@ -354,7 +297,6 @@
 
     <button class="btn-action" id="btnSave">احتساب وحفظ الكشف في السحاب</button>
 
-    <!-- عرض النتائج الفورية -->
     <div class="results-container">
       <div class="result-card main-net">
         <span class="result-title">الراتب الصافي المستحق</span>
@@ -382,11 +324,8 @@
       </div>
     </div>
 
-    <!-- السجلات السحابية -->
     <div class="history-section">
-      <div class="history-header">
-        <span class="history-title">السجلات المحفوظة في Firebase</span>
-      </div>
+      <div class="history-title">السجلات المحفوظة في Firebase</div>
       <div class="input-wrapper search-box">
         <input type="text" id="searchInput" placeholder="🔍 بحث باسم الموظف...">
       </div>
@@ -396,12 +335,10 @@
     </div>
   </div>
 
-  <!-- منطقة متوارية مخصصة للطباعة والتصدير PDF -->
   <div id="printArea" style="display:none;"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
     import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -410,18 +347,15 @@
       projectId: "calculator-5d1e9",
       storageBucket: "calculator-5d1e9.firebasestorage.app",
       messagingSenderId: "206617069962",
-      appId: "1:206617069962:web:55e13c111c6b25974e2073",
-      measurementId: "G-NZ8MYQCT6V"
+      appId: "1:206617069962:web:55e13c111c6b25974e2073"
     };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
     const db = getFirestore(app);
     const salariesRef = collection(db, "salaries");
 
     let allRecords = [];
 
-    // زر الاحتساب والحفظ
     document.getElementById('btnSave').addEventListener('click', async () => {
       const name = document.getElementById('employeeName').value.trim() || 'موظف غير مسمى';
       const baseSalary = parseFloat(document.getElementById('baseSalary').value) || 0;
@@ -441,17 +375,15 @@
         return;
       }
 
-      // المعادلات الحسابية
       const dailyRate = days > 0 ? (baseSalary / days) : 0;
       const hourlyRate = (days > 0 && hours > 0) ? (dailyRate / hours) : 0;
-      const overtimePay = overtimeHours * (hourlyRate * 1.5); // أجر الساعة الإضافية 1.5
+      const overtimePay = overtimeHours * (hourlyRate * 1.5);
 
       const grossSalary = baseSalary + housing + trans + bonus + overtimePay;
       const insuranceVal = (baseSalary * insRate) / 100;
       const totalDeductions = insuranceVal + otherDeductions;
       const netSalary = grossSalary - totalDeductions;
 
-      // تحديث الواجهة
       document.getElementById('resNet').textContent = netSalary.toLocaleString('en-US', { minimumFractionDigits: 2 });
       document.getElementById('resGross').textContent = grossSalary.toLocaleString('en-US', { minimumFractionDigits: 2 });
       document.getElementById('resTotalDeductions').textContent = totalDeductions.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -460,11 +392,12 @@
 
       const btn = document.getElementById('btnSave');
       btn.disabled = true;
-      btn.textContent = "جاري الحفظ بالسحاب...";
+      btn.textContent = "جاري الحفظ...";
 
       try {
         await addDoc(salariesRef, {
           name, baseSalary, grossSalary, totalDeductions, netSalary,
+          salary: baseSalary,
           housing, trans, bonus, insuranceVal, otherDeductions, overtimePay,
           createdAt: serverTimestamp()
         });
@@ -476,7 +409,6 @@
       }
     });
 
-    // استماع وتحديث القائمة الفورية
     const q = query(salariesRef, orderBy("createdAt", "desc"));
     onSnapshot(q, (snapshot) => {
       allRecords = [];
@@ -486,7 +418,6 @@
       renderList(allRecords);
     });
 
-    // رسم القائمة مع دعم الفلترة والبحث
     function renderList(records) {
       const container = document.getElementById('historyList');
       if (records.length === 0) {
@@ -494,46 +425,51 @@
         return;
       }
 
-      container.innerHTML = records.map(item => `
-        <div class="history-item">
-          <div>
-            <strong>${item.name}</strong><br>
-            <small style="color:var(--text-sub)">الصافي: <span style="color:var(--success-color); font-weight:bold;">${item.netSalary?.toLocaleString()}</span></small>
+      container.innerHTML = records.map(item => {
+        // معالجة القيمة الاحتياطية لمنع undefined
+        const displayNet = item.netSalary !== undefined ? item.netSalary : (item.salary !== undefined ? item.salary : 0);
+        
+        return `
+          <div class="history-item">
+            <div>
+              <strong>${item.name || 'موظف'}</strong><br>
+              <small style="color:var(--text-sub)">الصافي: <span style="color:var(--success-color); font-weight:bold;">${displayNet.toLocaleString()}</span></small>
+            </div>
+            <div class="item-actions">
+              <button class="btn-sm btn-pdf" onclick="generatePDF('${item.id}')">طباعة PDF</button>
+              <button class="btn-sm btn-delete" onclick="deleteRecord('${item.id}')">حذف</button>
+            </div>
           </div>
-          <div class="item-actions">
-            <button class="btn-sm btn-pdf" onclick="generatePDF('${item.id}')">طباعة PDF</button>
-            <button class="btn-sm btn-delete" onclick="deleteRecord('${item.id}')">حذف</button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
-    // تصفية البحث
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const val = e.target.value.toLowerCase();
-      const filtered = allRecords.filter(r => r.name.toLowerCase().includes(val));
+      const filtered = allRecords.filter(r => (r.name || '').toLowerCase().includes(val));
       renderList(filtered);
     });
 
-    // طباعة وتوليد كشف الراتب (Payslip)
     window.generatePDF = (id) => {
       const item = allRecords.find(r => r.id === id);
       if (!item) return;
+
+      const displayNet = item.netSalary !== undefined ? item.netSalary : (item.salary !== undefined ? item.salary : 0);
+      const displayBase = item.baseSalary !== undefined ? item.baseSalary : (item.salary !== undefined ? item.salary : 0);
 
       const printArea = document.getElementById('printArea');
       printArea.style.display = 'block';
       printArea.innerHTML = `
         <h2 style="text-align:center; margin-bottom:10px;">كشف استحقاق راتب شهري (Payslip)</h2>
-        <p><strong>اسم الموظف:</strong> ${item.name}</p>
+        <p><strong>اسم الموظف:</strong> ${item.name || 'غير مسمى'}</p>
         <hr style="margin:10px 0;">
         <table class="print-table">
           <tr><th>البيان</th><th>المبلغ</th></tr>
-          <tr><td>الراتب الأساسي</td><td>${item.baseSalary?.toLocaleString()}</td></tr>
-          <tr><td>بدل السكن والمواصلات والبدلات</td><td>${((item.housing||0) + (item.trans||0) + (item.bonus||0))?.toLocaleString()}</td></tr>
-          <tr><td>أجر الساعات الإضافية (Overtime)</td><td>${item.overtimePay?.toLocaleString()}</td></tr>
-          <tr style="background:#f9f9f9;"><td><strong>إجمالي الاستحقاقات (Gross)</strong></td><td><strong>${item.grossSalary?.toLocaleString()}</strong></td></tr>
-          <tr><td>استقطاع التأمينات والخصومات</td><td>${item.totalDeductions?.toLocaleString()}</td></tr>
-          <tr style="background:#e8f5e9;"><td><strong>صافي الراتب المستحق للصرف</strong></td><td><strong style="color:green;">${item.netSalary?.toLocaleString()}</strong></td></tr>
+          <tr><td>الراتب الأساسي</td><td>${displayBase.toLocaleString()}</td></tr>
+          <tr><td>البدلات والأوفرتايم</td><td>${((item.housing||0) + (item.trans||0) + (item.bonus||0) + (item.overtimePay||0)).toLocaleString()}</td></tr>
+          <tr style="background:#f9f9f9;"><td><strong>إجمالي الاستحقاقات (Gross)</strong></td><td><strong>${(item.grossSalary || displayBase).toLocaleString()}</strong></td></tr>
+          <tr><td>الخصومات والتأمينات</td><td>${(item.totalDeductions || 0).toLocaleString()}</td></tr>
+          <tr style="background:#e8f5e9;"><td><strong>صافي الراتب المستحق للصرف</strong></td><td><strong style="color:green;">${displayNet.toLocaleString()}</strong></td></tr>
         </table>
       `;
 
@@ -541,7 +477,6 @@
       printArea.style.display = 'none';
     };
 
-    // حذف سجل
     window.deleteRecord = async (id) => {
       if (confirm("هل أنت تأكد من رغبتك في حذف هذا السجل؟")) {
         try {
