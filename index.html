@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حاسبة الراتب الذكية</title>
+  <title>حاسبة الراتب الشاملة Pro</title>
   <style>
     :root {
       --bg-color: #000000;
@@ -14,6 +14,7 @@
       --text-main: #ffffff;
       --text-sub: #8e8e93;
       --input-bg: rgba(118, 118, 128, 0.24);
+      --danger-color: #ff453a;
       --card-radius: 20px;
     }
 
@@ -40,7 +41,7 @@
 
     .container {
       width: 100%;
-      max-width: 440px;
+      max-width: 460px;
       background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -58,31 +59,24 @@
     .header h1 {
       font-size: 24px;
       font-weight: 700;
-      letter-spacing: -0.5px;
       margin-bottom: 6px;
     }
 
     .header p {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-sub);
     }
 
     .input-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .input-group label {
       display: block;
       font-size: 13px;
       color: var(--text-sub);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 500;
-    }
-
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
     }
 
     .input-wrapper input {
@@ -90,8 +84,8 @@
       background: var(--input-bg);
       border: 1px solid transparent;
       border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 17px;
+      padding: 12px 14px;
+      font-size: 16px;
       color: var(--text-main);
       outline: none;
       transition: all 0.2s ease;
@@ -108,38 +102,37 @@
       gap: 12px;
     }
 
-    .btn-calc {
+    .btn-action {
       width: 100%;
       background: var(--accent-gradient);
       border: none;
       border-radius: 14px;
-      padding: 16px;
+      padding: 14px;
       color: #ffffff;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.1s ease, opacity 0.2s ease;
       box-shadow: 0 4px 15px rgba(10, 132, 255, 0.3);
       margin-top: 8px;
+      transition: transform 0.1s ease;
     }
 
-    .btn-calc:active {
+    .btn-action:active {
       transform: scale(0.98);
-      opacity: 0.9;
     }
 
     .results-container {
-      margin-top: 28px;
+      margin-top: 24px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .result-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
-      padding: 16px;
+      padding: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -150,23 +143,13 @@
       border-color: rgba(10, 132, 255, 0.3);
     }
 
-    .result-info span {
-      display: block;
-    }
-
     .result-title {
       font-size: 13px;
       color: var(--text-sub);
-      margin-bottom: 2px;
-    }
-
-    .result-subtitle {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
     }
 
     .result-value {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
       color: var(--text-main);
       direction: ltr;
@@ -175,20 +158,73 @@
     .highlight .result-value {
       color: #30d158;
     }
+
+    .history-section {
+      margin-top: 28px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 18px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .history-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: var(--danger-color);
+      cursor: pointer;
+      font-size: 12px;
+      padding: 4px 8px;
+    }
   </style>
 </head>
 <body>
 
   <div class="container">
     <div class="header">
-      <h1>حاسبة الراتب</h1>
-      <p>احسب تفاصيل راتبك اليومي والشهر بسلاسة</p>
+      <h1>حاسبة الراتب الشاملة</h1>
+      <p>حساب وتخزين السجلات في Firebase</p>
     </div>
 
     <div class="input-group">
-      <label>الراتب الشهري الأولي</label>
+      <label>اسم الموظف / المسمى</label>
       <div class="input-wrapper">
-        <input type="number" id="monthlySalary" placeholder="أدخل الراتب الشامل" inputmode="decimal">
+        <input type="text" id="employeeName" placeholder="مثال: رشيد العبيدي">
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>الراتب الشهري الأساسي</label>
+      <div class="input-wrapper">
+        <input type="number" id="monthlySalary" placeholder="أدخل المبلغ" inputmode="decimal">
       </div>
     </div>
 
@@ -196,60 +232,131 @@
       <div class="input-group">
         <label>أيام العمل/شهر</label>
         <div class="input-wrapper">
-          <input type="number" id="workDays" value="30" inputmode="numeric">
+          <input type="number" id="workDays" value="30">
         </div>
       </div>
       <div class="input-group">
         <label>ساعات العمل/يوم</label>
         <div class="input-wrapper">
-          <input type="number" id="workHours" value="8" inputmode="numeric">
+          <input type="number" id="workHours" value="8">
         </div>
       </div>
     </div>
 
-    <button class="btn-calc" onclick="calculateSalary()">حساب التفاصيل</button>
+    <button class="btn-action" id="btnSave">حساب وحفظ السجل</button>
 
     <div class="results-container">
       <div class="result-card highlight">
-        <div class="result-info">
-          <span class="result-title">الراتب الشهري الصافي</span>
-          <span class="result-subtitle">إجمالي المستحق</span>
-        </div>
+        <span class="result-title">الراتب الشهري</span>
         <span class="result-value" id="resMonthly">0.00</span>
       </div>
-
       <div class="result-card">
-        <div class="result-info">
-          <span class="result-title">معدل الراتب اليومي</span>
-          <span class="result-subtitle">لكل يوم عمل</span>
-        </div>
+        <span class="result-title">معدل اليوم</span>
         <span class="result-value" id="resDaily">0.00</span>
       </div>
-
       <div class="result-card">
-        <div class="result-info">
-          <span class="result-title">أجر ساعة العمل</span>
-          <span class="result-subtitle">لكل ساعة</span>
-        </div>
+        <span class="result-title">أجر الساعة</span>
         <span class="result-value" id="resHourly">0.00</span>
+      </div>
+    </div>
+
+    <div class="history-section">
+      <div class="history-header">
+        <span class="history-title">السجلات المزامنة من السحاب</span>
+      </div>
+      <div class="history-list" id="historyList">
+        <div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">جاري تحميل البيانات...</div>
       </div>
     </div>
   </div>
 
-  <script>
-    function calculateSalary() {
+  <!-- Firebase Web SDK Modules -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // إعدادات مشروع Firebase الخاص بك
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpK3xg0mWICrIpFqT-YOSuNySgd92y6lU",
+      authDomain: "calculator-5d1e9.firebaseapp.com",
+      projectId: "calculator-5d1e9",
+      storageBucket: "calculator-5d1e9.firebasestorage.app",
+      messagingSenderId: "206617069962",
+      appId: "1:206617069962:web:55e13c111c6b25974e2073",
+      measurementId: "G-NZ8MYQCT6V"
+    };
+
+    // تهيئة الخدمات
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const salariesRef = collection(db, "salaries");
+
+    // وظيفة الحساب والحفظ في السحاب
+    document.getElementById('btnSave').addEventListener('click', async () => {
+      const name = document.getElementById('employeeName').value || 'غير مسمى';
       const salary = parseFloat(document.getElementById('monthlySalary').value) || 0;
       const days = parseFloat(document.getElementById('workDays').value) || 30;
       const hours = parseFloat(document.getElementById('workHours').value) || 8;
 
+      if (salary <= 0) return;
+
       const daily = days > 0 ? (salary / days) : 0;
       const hourly = (days > 0 && hours > 0) ? (daily / hours) : 0;
 
-      document.getElementById('resMonthly').textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      document.getElementById('resDaily').textContent = daily.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      document.getElementById('resHourly').textContent = hourly.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-  </script>
+      // تحديث النتائج على الشاشة
+      document.getElementById('resMonthly').textContent = salary.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resDaily').textContent = daily.toLocaleString('en-US', { minimumFractionDigits: 2 });
+      document.getElementById('resHourly').textContent = hourly.toLocaleString('en-US', { minimumFractionDigits: 2 });
 
+      // إضافة المستند إلى Firestore
+      try {
+        await addDoc(salariesRef, {
+          name,
+          salary,
+          daily,
+          hourly,
+          createdAt: serverTimestamp()
+        });
+      } catch (e) {
+        console.error("خطأ أثناء الحفظ في Firebase:", e);
+      }
+    });
+
+    // استماع لحظي واسترجاع السجلات تلقائياً
+    const q = query(salariesRef, orderBy("createdAt", "desc"));
+    onSnapshot(q, (snapshot) => {
+      const container = document.getElementById('historyList');
+      if (snapshot.empty) {
+        container.innerHTML = '<div style="color:var(--text-sub); font-size:12px; text-align:center; padding:10px;">لا يوجد سجلات مخزنة</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      snapshot.forEach((docItem) => {
+        const item = docItem.data();
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <div>
+            <strong>${item.name}</strong><br>
+            <small style="color:var(--text-sub)">${item.salary?.toLocaleString()} | يومي: ${item.daily?.toFixed(1)}</small>
+          </div>
+          <button class="delete-btn" onclick="deleteRecord('${docItem.id}')">حذف</button>
+        `;
+        container.appendChild(div);
+      });
+    });
+
+    // وظيفة حذف سجل محدد
+    window.deleteRecord = async (id) => {
+      try {
+        await deleteDoc(doc(db, "salaries", id));
+      } catch (e) {
+        console.error("خطأ أثناء الحذف:", e);
+      }
+    };
+  </script>
 </body>
 </html>
